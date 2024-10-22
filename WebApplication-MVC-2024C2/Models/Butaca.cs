@@ -4,5 +4,7 @@
     {
         public int IdNum { get; set; }
         public bool Disponible { get; set; }
+
+        public string Name { get; set; }
     }
 }
