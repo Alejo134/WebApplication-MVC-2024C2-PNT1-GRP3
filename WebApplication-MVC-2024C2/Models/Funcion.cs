@@ -12,7 +12,7 @@
 
         public Funcion()
         {
-            Pelicula = new Pelicula();
+            
 
         }
 
