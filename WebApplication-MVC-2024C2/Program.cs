@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using WebApplication_MVC_2024C2.Context;
+
 namespace WebApplication_MVC_2024C2
 {
     public class Program
@@ -6,10 +9,14 @@ namespace WebApplication_MVC_2024C2
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<CineDataBaseContext>(options => options.UseSqlServer(builder.Configuration["ConnectionString:CineDB"]));
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
