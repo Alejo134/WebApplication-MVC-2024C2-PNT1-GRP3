@@ -22,7 +22,7 @@ namespace WebApplication_MVC_2024C2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Pelicula", b =>
+            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Butaca", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,8 +30,26 @@ namespace WebApplication_MVC_2024C2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ButacasId")
+                    b.Property<bool>("Disponible")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PeliculaId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PeliculaId");
+
+                    b.ToTable("Butacas");
+                });
+
+            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Pelicula", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Clasificacion")
                         .IsRequired()
@@ -60,28 +78,7 @@ namespace WebApplication_MVC_2024C2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ButacasId");
-
                     b.ToTable("Peliculas");
-                });
-
-            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.PeliculaButaca", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Disponible")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("IdPelicula")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Butacas");
                 });
 
             modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Usuario", b =>
@@ -111,14 +108,15 @@ namespace WebApplication_MVC_2024C2.Migrations
                     b.ToTable("Usuarios");
                 });
 
+            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Butaca", b =>
+                {
+                    b.HasOne("WebApplication_MVC_2024C2.Models.Pelicula", null)
+                        .WithMany("Butacas")
+                        .HasForeignKey("PeliculaId");
+                });
+
             modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Pelicula", b =>
                 {
-                    b.HasOne("WebApplication_MVC_2024C2.Models.PeliculaButaca", "Butacas")
-                        .WithMany()
-                        .HasForeignKey("ButacasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Butacas");
                 });
 #pragma warning restore 612, 618
