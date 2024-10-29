@@ -20,7 +20,7 @@ namespace WebApplication_MVC_2024C2.Context
 
         }
 
-        public DbSet<Butaca> Butacas { get; set; }
+        public DbSet<PeliculaButaca> Butacas { get; set; }
         public DbSet<Pelicula> Peliculas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
