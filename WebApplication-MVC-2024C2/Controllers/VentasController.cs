@@ -10,22 +10,22 @@ using WebApplication_MVC_2024C2.Models;
 
 namespace WebApplication_MVC_2024C2.Controllers
 {
-    public class PeliculasController : Controller
+    public class VentasController : Controller
     {
         private readonly CineDataBaseContext _context;
 
-        public PeliculasController(CineDataBaseContext context)
+        public VentasController(CineDataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: Peliculas
+        // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Peliculas.ToListAsync());
+            return View(await _context.Venta.ToListAsync());
         }
 
-        // GET: Peliculas/Details/5
+        // GET: Ventas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var pelicula = await _context.Peliculas
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pelicula == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(pelicula);
+            return View(venta);
         }
 
-        // GET: Peliculas/Create
+        // GET: Ventas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Peliculas/Create
+        // POST: Ventas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,PortadaPelicula,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
+        public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total")] Venta venta)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pelicula);
+                _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pelicula);
+            return View(venta);
         }
 
-        // GET: Peliculas/Edit/5
+        // GET: Ventas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var pelicula = await _context.Peliculas.FindAsync(id);
-            if (pelicula == null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta == null)
             {
                 return NotFound();
             }
-            return View(pelicula);
+            return View(venta);
         }
 
-        // POST: Peliculas/Edit/5
+        // POST: Ventas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,PortadaPelicula,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdPelicula,Fecha,CantButacas,Total")] Venta venta)
         {
-            if (id != pelicula.Id)
+            if (id != venta.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace WebApplication_MVC_2024C2.Controllers
             {
                 try
                 {
-                    _context.Update(pelicula);
+                    _context.Update(venta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PeliculaExists(pelicula.Id))
+                    if (!VentaExists(venta.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace WebApplication_MVC_2024C2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pelicula);
+            return View(venta);
         }
 
-        // GET: Peliculas/Delete/5
+        // GET: Ventas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var pelicula = await _context.Peliculas
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pelicula == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(pelicula);
+            return View(venta);
         }
 
-        // POST: Peliculas/Delete/5
+        // POST: Ventas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pelicula = await _context.Peliculas.FindAsync(id);
-            if (pelicula != null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta != null)
             {
-                _context.Peliculas.Remove(pelicula);
+                _context.Venta.Remove(venta);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PeliculaExists(int id)
+        private bool VentaExists(int id)
         {
-            return _context.Peliculas.Any(e => e.Id == id);
+            return _context.Venta.Any(e => e.Id == id);
         }
     }
 }
