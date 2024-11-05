@@ -54,7 +54,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,PortadaPelicula,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
+        public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,PortadaPelicula,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
         {
             if (id != pelicula.Id)
             {
