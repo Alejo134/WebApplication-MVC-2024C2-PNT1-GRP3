@@ -14,7 +14,7 @@ namespace WebApplication_MVC_2024C2.Models
         public int NroDeSala { get; set; }
         public DateTime Fecha { get; set; }
         public double Precio { get; set; }
-        public int Butacas { get; set; }
+        public int CantButacas { get; set; }
 
     }
 

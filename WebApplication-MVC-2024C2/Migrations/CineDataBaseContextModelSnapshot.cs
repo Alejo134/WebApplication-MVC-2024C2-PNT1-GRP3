@@ -30,7 +30,7 @@ namespace WebApplication_MVC_2024C2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Butacas")
+                    b.Property<int>("CantButacas")
                         .HasColumnType("int");
 
                     b.Property<string>("Clasificacion")
