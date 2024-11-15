@@ -27,8 +27,8 @@
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CantButacas" class="control-label"></label>
-                <input asp-for="CantButacas" class="form-control" />
+                <label for="CantButacas">Cantidad de Butacas</label>
+                <input asp-for="CantButacas" class="form-control" id="CantButacas" />
                 <span asp-validation-for="CantButacas" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,6 +46,16 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script>
+    document.getElementById("CantButacas").addEventListener("input", function (event) {
+        let cantButacas = parseInt(event.target.value, 20);
+        if (cantButacas < 0) {
+            event.target.setCustomValidity("La cantidad de butacas no puede ser negativa.");
+        } else {
+            event.target.setCustomValidity(""); // Limpia el mensaje de error si el valor es válido
+        }
+    });
+</script>
 
 <script>
     document.getElementById("IdPelicula").addEventListener("change", function () {

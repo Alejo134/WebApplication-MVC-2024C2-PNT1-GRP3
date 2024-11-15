@@ -101,6 +101,14 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return View(venta);
             }*/
 
+            if (venta.CantButacas < 0)
+            {
+                ModelState.AddModelError("CantButacas", "La cantidad de butacas no puede ser negativa.");
+                ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
+                ViewBag.Fechas = new SelectList(new List<DateTime> { pelicula.Fecha }, pelicula.Fecha);
+                return View(venta);
+            }
+
             if (venta.CantButacas > pelicula.CantButacas)
             {
                 ModelState.AddModelError("CantButacas", $"No hay suficientes butacas disponibles. Solo quedan {pelicula.CantButacas} butacas.");
@@ -241,15 +249,34 @@ namespace WebApplication_MVC_2024C2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venta = await _context.Ventas.FindAsync(id);
+            // Buscar la venta por su ID
+            var venta = await _context.Ventas.FirstOrDefaultAsync(v => v.Id == id);
+
             if (venta != null)
             {
+                // Obtener la película asociada usando el IdPelicula de la venta
+                var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == venta.IdPelicula);
+
+                if (pelicula != null)
+                {
+                    // Devolver las butacas a la película
+                    pelicula.CantButacas += venta.CantButacas;  // Sumar las butacas reservadas a la cantidad disponible
+
+                    // Actualizar la película en la base de datos
+                    _context.Update(pelicula);
+                }
+
+                // Eliminar la venta
                 _context.Ventas.Remove(venta);
+
+                // Guardar los cambios en la base de datos
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
+            // Redirigir al índice (lista de ventas)
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool VentaExists(int id)
         {
