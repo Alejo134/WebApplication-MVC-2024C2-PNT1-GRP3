@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication_MVC_2024C2.Context;
 
@@ -11,9 +12,11 @@ using WebApplication_MVC_2024C2.Context;
 namespace WebApplication_MVC_2024C2.Migrations
 {
     [DbContext(typeof(CineDataBaseContext))]
-    partial class CineDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241115030100_Ventas3")]
+    partial class Ventas3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,12 +133,28 @@ namespace WebApplication_MVC_2024C2.Migrations
                     b.Property<int>("IdPelicula")
                         .HasColumnType("int");
 
+                    b.Property<int>("PeliculaId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Total")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PeliculaId");
+
                     b.ToTable("Ventas");
+                });
+
+            modelBuilder.Entity("WebApplication_MVC_2024C2.Models.Venta", b =>
+                {
+                    b.HasOne("WebApplication_MVC_2024C2.Models.Pelicula", "Pelicula")
+                        .WithMany()
+                        .HasForeignKey("PeliculaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pelicula");
                 });
 #pragma warning restore 612, 618
         }

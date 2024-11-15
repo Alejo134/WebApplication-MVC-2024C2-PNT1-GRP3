@@ -21,16 +21,15 @@ namespace WebApplication_MVC_2024C2.Context
         }
 
         public DbSet<Pelicula> Peliculas { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Venta> Ventas { get; set; }
-
-        //Ventas falta implementar. Chequear el caso de duplicado de Venta..
-
+        public DbSet<Usuario> Usuarios { get; set; }    
         public DbSet<NuevoUsuario> NuevoUsuario { get; set; }
 
-        public DbSet<WebApplication_MVC_2024C2.Models.Venta> Venta { get; set; } = default!;
+        public DbSet<Venta> Ventas { get; set; }
 
-       
+
+
+
+
 
 
 

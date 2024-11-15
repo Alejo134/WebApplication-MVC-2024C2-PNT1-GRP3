@@ -153,5 +153,18 @@ namespace WebApplication_MVC_2024C2.Controllers
         {
             return _context.Peliculas.Any(e => e.Id == id);
         }
+        // GET: Peliculas/GetPrecio
+        [HttpGet]
+        public IActionResult GetPrecio(int id)
+        {
+            var pelicula = _context.Peliculas.FirstOrDefault(p => p.Id == id);
+            if (pelicula == null)
+            {
+                return NotFound(); // Si no se encuentra la película, devolver un error.
+            }
+            return Json(pelicula.Precio); // Devolver el precio como JSON.
+        }
+
+       
     }
 }

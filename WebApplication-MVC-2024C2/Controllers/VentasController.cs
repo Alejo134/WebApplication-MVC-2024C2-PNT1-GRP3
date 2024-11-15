@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication_MVC_2024C2.Context;
 using WebApplication_MVC_2024C2.Models;
 
+
 namespace WebApplication_MVC_2024C2.Controllers
 {
     public class VentasController : Controller
@@ -22,7 +23,10 @@ namespace WebApplication_MVC_2024C2.Controllers
         // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Venta.ToListAsync());
+            var ventas = await _context.Ventas
+                                       // .Include(v => v.Pelicula) // Incluye la película asociada a la venta
+                                        .ToListAsync();
+            return View(ventas);
         }
 
         // GET: Ventas/Details/5
@@ -33,7 +37,7 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var venta = await _context.Venta
+            var venta = await _context.Ventas
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (venta == null)
             {
@@ -44,8 +48,23 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // GET: Ventas/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // Obtener las películas desde la base de datos
+            var peliculas = await _context.Peliculas.ToListAsync();
+
+            // Si no hay películas, redirigir o mostrar un mensaje de error
+            if (!peliculas.Any())
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Cargar las películas en el ViewBag
+            ViewBag.Peliculas = new SelectList(peliculas, "Id", "Titulo");
+
+            // Inicialmente, las fechas estarán vacías hasta que se seleccione una película
+            ViewBag.Fechas = new SelectList(Enumerable.Empty<DateTime>());
+
             return View();
         }
 
@@ -54,16 +73,99 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total")] Venta venta)
+        public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula")] Venta venta)
+
+
         {
+
+            // Agregar para depuración
+            Console.WriteLine("Entra a la acción Create");
+
+            // Validar que la película seleccionada existe
+            var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == venta.IdPelicula);
+
+            if (pelicula == null)
+            {
+                ModelState.AddModelError("IdPelicula", "La película seleccionada no existe.");
+                ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
+                ViewBag.Fechas = new SelectList(Enumerable.Empty<DateTime>());
+                return View(venta);
+            }
+
+            /* Verificar que la fecha de la venta coincida con la fecha de la película
+            if (venta.Fecha.Date != pelicula.Fecha.Date)
+            {
+                ModelState.AddModelError("Fecha", "La fecha seleccionada no coincide con la fecha disponible para la película.");
+                ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
+                ViewBag.Fechas = new SelectList(new List<DateTime> { pelicula.Fecha }, pelicula.Fecha);
+                return View(venta);
+            }*/
+
+            if (venta.CantButacas > pelicula.CantButacas)
+            {
+                ModelState.AddModelError("CantButacas", $"No hay suficientes butacas disponibles. Solo quedan {pelicula.CantButacas} butacas.");
+                ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
+                ViewBag.Fechas = new SelectList(new List<DateTime> { pelicula.Fecha }, pelicula.Fecha);
+                return View(venta);
+            }
+
+            // Asignar la película a la propiedad 'Pelicula' de la venta
+           // venta.Pelicula = pelicula;
+
+            venta.IdPelicula = pelicula.Id;
+
+            // Calcular el total basado en la película seleccionada
+            venta.Total = pelicula.Precio * venta.CantButacas;
+
             if (ModelState.IsValid)
             {
+                pelicula.CantButacas -= venta.CantButacas;
+                _context.Update(pelicula);
                 _context.Add(venta);
+
                 await _context.SaveChangesAsync();
+                Console.WriteLine($"Guardando venta: {venta.IdPelicula}, {venta.Fecha}, {venta.CantButacas}, {venta.Total}");
                 return RedirectToAction(nameof(Index));
             }
+            // Depuración: mostrar todos los errores del modelo
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine($"Error: {error.ErrorMessage}");
+            }
+
+
+            // Si hay un error, recargar las listas para la vista
+            ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
+            ViewBag.Fechas = new SelectList(new List<DateTime> { pelicula.Fecha }, pelicula.Fecha);
             return View(venta);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFechasByPelicula(int id)
+        {
+            var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pelicula == null)
+            {
+                return Json(new List<DateTime>());
+            }
+
+            // Devuelve la fecha de la película (o ajusta si necesitas más de una fecha)
+            return Json(new List<DateTime> { pelicula.Fecha });
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetPrecioByPelicula(int id)
+        {
+            var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pelicula == null)
+            {
+                return Json(0); // Si no se encuentra, devuelve 0
+            }
+
+            return Json(pelicula.Precio);
+        }
+
 
         // GET: Ventas/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -73,7 +175,7 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var venta = await _context.Venta.FindAsync(id);
+            var venta = await _context.Ventas.FindAsync(id);
             if (venta == null)
             {
                 return NotFound();
@@ -124,7 +226,7 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
-            var venta = await _context.Venta
+            var venta = await _context.Ventas
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (venta == null)
             {
@@ -139,10 +241,10 @@ namespace WebApplication_MVC_2024C2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venta = await _context.Venta.FindAsync(id);
+            var venta = await _context.Ventas.FindAsync(id);
             if (venta != null)
             {
-                _context.Venta.Remove(venta);
+                _context.Ventas.Remove(venta);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +253,7 @@ namespace WebApplication_MVC_2024C2.Controllers
 
         private bool VentaExists(int id)
         {
-            return _context.Venta.Any(e => e.Id == id);
+            return _context.Ventas.Any(e => e.Id == id);
         }
     }
 }
