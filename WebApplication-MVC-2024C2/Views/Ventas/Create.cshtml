@@ -37,9 +37,15 @@
                 <label for="Promocion">Aplicar Promoción</label>
                 <select asp-for="Promocion" class="form-control">
                     <option value="false">Seleccionar promoción</option>
-                    <option value="true">50% de descuento</option>
+                    <option value="true">50% de descuento (1000 puntos)</option>
                 </select>
                 <span asp-validation-for="Promocion" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label for="PuntosUsuario">Puntos disponibles</label>
+                <input type="text" id="PuntosUsuario" class="form-control" value="@ViewBag.PuntosUsuario" readonly />
             </div>
 
             <div class="form-group">
@@ -92,15 +98,16 @@
     const cantButacasInput = document.getElementById("CantButacas");
     const totalInput = document.getElementById("Total");
     const promocionSelect = document.getElementById("Promocion");
+    const puntosUsuarioInput = document.getElementById("PuntosUsuario");
 
-    // Función para actualizar el total
+     // Función para actualizar el total
     function actualizarTotal() {
         const peliculaId = peliculaDropdown.value;
         const cantButacas = parseInt(cantButacasInput.value) || 0;
         const promocion = promocionSelect.value === "true";  // Verifica si la opción seleccionada es '50%' de descuento
 
         // Si no hay película seleccionada, no calcular
-        if (!peliculaId) {
+        if (!peliculaId || cantButacas <= 0) {
             totalInput.value = "";
             return;
         }
@@ -109,12 +116,18 @@
         fetch(`/Ventas/GetPrecioByPelicula/${peliculaId}`)
             .then(response => response.json())
             .then(precio => {
-                // Calcular el total
-                let total = precio * cantButacas;
+                let total = precio * cantButacas;  // Calcula el total sin descuento
 
-                // Aplicar 50% de descuento si la promoción está seleccionada
+                // Verificar si la promoción es válida
                 if (promocion) {
-                    total = total / 2;  // Aplica el descuento del 50%
+                    const puntosUsuario = parseInt(puntosUsuarioInput.value) || 0;
+                    if (puntosUsuario < 1000) {
+                        alert("No tienes suficientes puntos para aplicar la promoción.");
+                        promocionSelect.value = "false";  // Desmarcar la opción de promoción
+                        total = precio * cantButacas;  // Volver al precio original
+                    } else {
+                        total = total / 2;  // Aplica el descuento del 50%
+                    }
                 }
 
                 totalInput.value = total.toFixed(2);  // Mostrar con dos decimales
@@ -125,6 +138,7 @@
     peliculaDropdown.addEventListener("change", actualizarTotal);
     cantButacasInput.addEventListener("input", actualizarTotal);
     promocionSelect.addEventListener("change", actualizarTotal);
+
 </script>
 
 @section Scripts {

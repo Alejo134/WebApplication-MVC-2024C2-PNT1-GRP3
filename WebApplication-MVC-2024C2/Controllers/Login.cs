@@ -33,7 +33,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             {
                 // Validación de credenciales en la base de datos
                 var user = await _context.NuevoUsuario
-                                         .SingleOrDefaultAsync(u => u.Usuario == model.Usuario && u.Contraseña == model.Contraseña);
+                                         .SingleOrDefaultAsync(u => u.Usuario == model.Usuario && u.Contrasenia == model.Contraseña);
 
                 if (user != null)
 

@@ -59,6 +59,17 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Obtener los puntos del usuario logueado
+            var userId = HttpContext.Session.GetInt32("IDUsuario");
+            if (userId != null)
+            {
+                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId.Value);
+                if (usuario != null)
+                {
+                    ViewBag.PuntosUsuario = usuario.Puntos; // Pasar los puntos al ViewBag
+                }
+            }
+
             // Cargar las películas en el ViewBag
             ViewBag.Peliculas = new SelectList(peliculas, "Id", "Titulo");
 
@@ -310,9 +321,24 @@ namespace WebApplication_MVC_2024C2.Controllers
                 {
                     // Devolver las butacas a la película
                     pelicula.CantButacas += venta.CantButacas;  // Sumar las butacas reservadas a la cantidad disponible
+                    var userId = HttpContext.Session.GetInt32("IDUsuario");
+                    var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId);
+                    if (venta.Promocion)
+                    {
+                        usuario.Puntos += 1000;
+                        _context.Update(usuario);
+                    }
+                    else
+                    {
+                        usuario.Puntos -= 200;
+                        _context.Update(usuario);
+                    }
+                
+
 
                     // Actualizar la película en la base de datos
                     _context.Update(pelicula);
+                    
                 }
 
                 // Eliminar la venta

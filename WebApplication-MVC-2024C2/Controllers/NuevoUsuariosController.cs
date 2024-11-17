@@ -54,7 +54,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Usuario,Contraseña,Email")] NuevoUsuario nuevoUsuario)
+        public async Task<IActionResult> Create([Bind("Id,Usuario,Contrasenia,Email")] NuevoUsuario nuevoUsuario)
         {
             if (ModelState.IsValid)
             {
@@ -115,7 +115,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Usuario,Contraseña,Email")] NuevoUsuario nuevoUsuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Usuario,Contrasenia,Email")] NuevoUsuario nuevoUsuario)
         {
             if (id != nuevoUsuario.Id)
             {
