@@ -10,6 +10,17 @@ namespace WebApplication_MVC_2024C2.Models
         public int CantButacas { get; set; }
         public double Total { get; set; }
 
+        
+
+        public Boolean Promocion { get; set; }
+
+        public int IDUsuario {  get; set; }
+
+
+
+
+
+
         //public Pelicula Pelicula { get; set; }
 
 

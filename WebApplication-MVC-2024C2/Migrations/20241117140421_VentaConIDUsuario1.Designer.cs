@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication_MVC_2024C2.Context;
 
@@ -11,9 +12,11 @@ using WebApplication_MVC_2024C2.Context;
 namespace WebApplication_MVC_2024C2.Migrations
 {
     [DbContext(typeof(CineDataBaseContext))]
-    partial class CineDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241117140421_VentaConIDUsuario1")]
+    partial class VentaConIDUsuario1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +41,6 @@ namespace WebApplication_MVC_2024C2.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Puntos")
-                        .HasColumnType("int");
 
                     b.Property<string>("Usuario")
                         .IsRequired()
@@ -136,8 +136,8 @@ namespace WebApplication_MVC_2024C2.Migrations
                     b.Property<int>("IdPelicula")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Promocion")
-                        .HasColumnType("bit");
+                    b.Property<double>("Promocion")
+                        .HasColumnType("float");
 
                     b.Property<double>("Total")
                         .HasColumnType("float");

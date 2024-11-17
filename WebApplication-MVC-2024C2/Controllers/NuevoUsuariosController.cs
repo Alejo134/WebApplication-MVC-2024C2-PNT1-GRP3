@@ -79,6 +79,8 @@ namespace WebApplication_MVC_2024C2.Controllers
                     ModelState.AddModelError("Email", "Este correo electrónico ya está registrado.");
                     return View(nuevoUsuario); // Retorna la vista con el mensaje de error
                 }
+                //Iniciar con 1000 puntos.(antes de agregar a contaxt)
+                nuevoUsuario.Puntos = 1000;
 
                 // Si el usuario y correo son únicos, agregar el nuevo usuario
                 _context.Add(nuevoUsuario);

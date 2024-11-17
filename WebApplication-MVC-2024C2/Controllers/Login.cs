@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Threading.Tasks;
 using WebApplication_MVC_2024C2.Context;
 using WebApplication_MVC_2024C2.Models;
@@ -35,9 +36,21 @@ namespace WebApplication_MVC_2024C2.Controllers
                                          .SingleOrDefaultAsync(u => u.Usuario == model.Usuario && u.Contraseña == model.Contraseña);
 
                 if (user != null)
+
                 {
+
+
+                    model.IDUsuario = user.Id;
+
+                    HttpContext.Session.SetInt32("IDUsuario", user.Id);
+
+
                     // Aquí puedes redirigir al usuario a una página protegida, como el Home
                     return RedirectToAction("Index", "Home"); // Redirigir al Home u otra página
+
+                   
+
+
                 }
                 else
                 {

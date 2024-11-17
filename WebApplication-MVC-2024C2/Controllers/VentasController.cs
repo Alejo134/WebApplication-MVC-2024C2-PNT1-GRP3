@@ -73,7 +73,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula")] Venta venta)
+        public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula,Promocion")] Venta venta)
 
 
         {
@@ -121,19 +121,68 @@ namespace WebApplication_MVC_2024C2.Controllers
            // venta.Pelicula = pelicula;
 
             venta.IdPelicula = pelicula.Id;
+            
 
             // Calcular el total basado en la película seleccionada
-            venta.Total = pelicula.Precio * venta.CantButacas;
+            // venta.Total = pelicula.Precio * venta.CantButacas;
+            // Calcula el total
+            if (venta.Promocion)
+            {
+                // Si se aplica la promoción 2x1, el total es la mitad
+                venta.Total = (pelicula.Precio * venta.CantButacas) / 2;
+            }
+            else
+            {
+                // Si no se aplica la promoción, el total es el precio completo
+                venta.Total = pelicula.Precio * venta.CantButacas;
+            }
 
             if (ModelState.IsValid)
             {
+                Console.WriteLine($"Promocion: {venta.Promocion}");
+                var userId = HttpContext.Session.GetInt32("IDUsuario"); // Recuperar el ID del usuario logueado
+
+                if (userId == null)
+                {
+                    ModelState.AddModelError("", "Debe iniciar sesión para realizar una venta.");
+                    return View(venta);
+
+                    //break?
+                }
+                
+                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId); // Obtener usuario
+
+                if (usuario != null)
+                    if (!venta.Promocion)
+                    {
+
+
+                        usuario.Puntos += 200;  // Suma 200 puntos
+                        _context.Update(usuario);
+
+
+                    } else {
+
+                        usuario.Puntos -= 1000;
+                        _context.Update(usuario);
+
+                    }
+
+
+                
+                venta.IDUsuario = userId.Value;
+
                 pelicula.CantButacas -= venta.CantButacas;
+                
                 _context.Update(pelicula);
                 _context.Add(venta);
 
                 await _context.SaveChangesAsync();
                 Console.WriteLine($"Guardando venta: {venta.IdPelicula}, {venta.Fecha}, {venta.CantButacas}, {venta.Total}");
+
                 return RedirectToAction(nameof(Index));
+
+
             }
             // Depuración: mostrar todos los errores del modelo
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))

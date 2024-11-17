@@ -18,5 +18,7 @@ namespace WebApplication_MVC_2024C2.Models
         [Required(ErrorMessage = "El correo electrónico es obligatorio")]
         [EmailAddress(ErrorMessage = "Formato de correo no válido")]
         public string Email { get; set; }
+
+        public int Puntos { get; set; }
     }
 }

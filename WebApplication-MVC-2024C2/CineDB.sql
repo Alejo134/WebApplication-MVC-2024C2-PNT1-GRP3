@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [CineDB]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Database [CineDB]    Script Date: 17/11/2024 14:30:36 ******/
 CREATE DATABASE [CineDB]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -82,7 +82,7 @@ ALTER DATABASE [CineDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_PO
 GO
 USE [CineDB]
 GO
-/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 17/11/2024 14:30:36 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[__EFMigrationsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NuevoUsuario]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Table [dbo].[NuevoUsuario]    Script Date: 17/11/2024 14:30:36 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -106,13 +106,14 @@ CREATE TABLE [dbo].[NuevoUsuario](
 	[Usuario] [nvarchar](50) NOT NULL,
 	[Contraseña] [nvarchar](50) NOT NULL,
 	[Email] [nvarchar](max) NOT NULL,
+	[Puntos] [int] NOT NULL,
  CONSTRAINT [PK_NuevoUsuario] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Peliculas]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Table [dbo].[Peliculas]    Script Date: 17/11/2024 14:30:36 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -132,7 +133,7 @@ CREATE TABLE [dbo].[Peliculas](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Usuarios]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Table [dbo].[Usuarios]    Script Date: 17/11/2024 14:30:36 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -149,7 +150,7 @@ CREATE TABLE [dbo].[Usuarios](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Ventas]    Script Date: 15/11/2024 18:11:00 ******/
+/****** Object:  Table [dbo].[Ventas]    Script Date: 17/11/2024 14:30:36 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -160,6 +161,8 @@ CREATE TABLE [dbo].[Ventas](
 	[Fecha] [datetime2](7) NOT NULL,
 	[CantButacas] [int] NOT NULL,
 	[Total] [float] NOT NULL,
+	[IDUsuario] [int] NOT NULL,
+	[Promocion] [bit] NOT NULL,
  CONSTRAINT [PK_Ventas] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -182,17 +185,22 @@ INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241115191920_Ventas4', N'8.0.11')
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241115200235_Ventas5', N'8.0.11')
 INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241115204233_Ventas6', N'8.0.11')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241117140421_VentaConIDUsuario1', N'8.0.11')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241117143309_AgregadoDePuntosAUsuario1', N'8.0.11')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241117144610_AgregadoDePuntosAUsuario2', N'8.0.11')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20241117145934_AgregadoDePuntosAUsuario3', N'8.0.11')
 GO
 SET IDENTITY_INSERT [dbo].[NuevoUsuario] ON 
 
-INSERT [dbo].[NuevoUsuario] ([Id], [Usuario], [Contraseña], [Email]) VALUES (1, N'Ivan_Schutt', N'asd123', N'isch.80@gmail.com')
-INSERT [dbo].[NuevoUsuario] ([Id], [Usuario], [Contraseña], [Email]) VALUES (2, N'IL', N'123456', N'IL@gmail.com')
+INSERT [dbo].[NuevoUsuario] ([Id], [Usuario], [Contraseña], [Email], [Puntos]) VALUES (1, N'Ivan_Schutt', N'asd123', N'isch.80@gmail.com', 0)
+INSERT [dbo].[NuevoUsuario] ([Id], [Usuario], [Contraseña], [Email], [Puntos]) VALUES (2, N'IL', N'123456', N'IL@gmail.com', 0)
+INSERT [dbo].[NuevoUsuario] ([Id], [Usuario], [Contraseña], [Email], [Puntos]) VALUES (3, N'UsuarioConPuntos', N'123456', N'usuarioConPuntos@gmail.com', 200)
 SET IDENTITY_INSERT [dbo].[NuevoUsuario] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Peliculas] ON 
 
-INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (1, N'Spider-Man (2002)', N'Spider-Man (2002) es una película de superhéroes dirigida por Sam Raimi, basada en el personaje de cómic del mismo nombre creado por Stan Lee y Steve Ditko para Marvel Comics. Es la primera entrega de una trilogía de Spider-Man protagonizada por Tobey Maguire como Peter Parker / Spider-Man.', N'+12', 1, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 10000, 18)
-INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (2, N'Spider-Man (2002)', N'Spider-Man (2002) es una película de superhéroes dirigida por Sam Raimi, basada en el personaje de cómic del mismo nombre creado por Stan Lee y Steve Ditko para Marvel Comics. Es la primera entrega de una trilogía de Spider-Man protagonizada por Tobey Maguire como Peter Parker / Spider-Man.', N'+12', 1, CAST(N'2025-01-08T18:30:00.0000000' AS DateTime2), 10000, 20)
+INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (1, N'Spider-Man (2002)', N'Spider-Man (2002) es una película de superhéroes dirigida por Sam Raimi, basada en el personaje de cómic del mismo nombre creado por Stan Lee y Steve Ditko para Marvel Comics. Es la primera entrega de una trilogía de Spider-Man protagonizada por Tobey Maguire como Peter Parker / Spider-Man.', N'+12', 1, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 10000, 19)
+INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (2, N'Spider-Man (2002)', N'Spider-Man (2002) es una película de superhéroes dirigida por Sam Raimi, basada en el personaje de cómic del mismo nombre creado por Stan Lee y Steve Ditko para Marvel Comics. Es la primera entrega de una trilogía de Spider-Man protagonizada por Tobey Maguire como Peter Parker / Spider-Man.', N'+12', 1, CAST(N'2025-01-08T18:30:00.0000000' AS DateTime2), 10000, 19)
 INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (3, N'Spider-Man 2 (2004)', N'Spider-Man 2 (2004) es la secuela de Spider-Man (2002), dirigida nuevamente por Sam Raimi y protagonizada por Tobey Maguire como Peter Parker / Spider-Man. La película sigue la evolución de Peter Parker mientras lucha por equilibrar su vida como superhéroe y como persona, enfrentando nuevos desafíos tanto emocionales como físicos.', N'+12', 2, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 10000, 20)
 INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (4, N'Spider-Man 2 (2004)', N'Spider-Man 2 (2004) es la secuela de Spider-Man (2002), dirigida nuevamente por Sam Raimi y protagonizada por Tobey Maguire como Peter Parker / Spider-Man. La película sigue la evolución de Peter Parker mientras lucha por equilibrar su vida como superhéroe y como persona, enfrentando nuevos desafíos tanto emocionales como físicos.', N'+12', 2, CAST(N'2025-01-08T18:30:00.0000000' AS DateTime2), 10000, 20)
 INSERT [dbo].[Peliculas] ([Id], [Titulo], [Descripcion], [Clasificacion], [NroDeSala], [Fecha], [Precio], [CantButacas]) VALUES (5, N'Spider-Man 3 (2007)', N'Spider-Man 3 (2007) es la tercera y última entrega de la trilogía dirigida por Sam Raimi sobre el icónico superhéroe de Marvel. Aunque esta película continúa explorando los dilemas personales de Peter Parker / Spider-Man, se distingue por su tono más oscuro y la inclusión de varios villanos, lo que llevó a una trama más compleja y, en algunos aspectos, más dividida entre acción y desarrollo de personajes.', N'+12', 3, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 10000, 20)
@@ -201,10 +209,15 @@ SET IDENTITY_INSERT [dbo].[Peliculas] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Ventas] ON 
 
-INSERT [dbo].[Ventas] ([Id], [IdPelicula], [Fecha], [CantButacas], [Total]) VALUES (8, 1, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 2, 20000)
+INSERT [dbo].[Ventas] ([Id], [IdPelicula], [Fecha], [CantButacas], [Total], [IDUsuario], [Promocion]) VALUES (25, 2, CAST(N'2025-01-08T18:30:00.0000000' AS DateTime2), 1, 5000, 3, 1)
+INSERT [dbo].[Ventas] ([Id], [IdPelicula], [Fecha], [CantButacas], [Total], [IDUsuario], [Promocion]) VALUES (26, 1, CAST(N'2025-01-01T18:30:00.0000000' AS DateTime2), 1, 10000, 3, 0)
 SET IDENTITY_INSERT [dbo].[Ventas] OFF
 GO
+ALTER TABLE [dbo].[NuevoUsuario] ADD  DEFAULT ((0)) FOR [Puntos]
+GO
 ALTER TABLE [dbo].[Peliculas] ADD  DEFAULT ((0)) FOR [CantButacas]
+GO
+ALTER TABLE [dbo].[Ventas] ADD  DEFAULT ((0)) FOR [IDUsuario]
 GO
 USE [master]
 GO

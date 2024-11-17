@@ -26,16 +26,28 @@
                 <select asp-for="Fecha" class="form-control" asp-items="ViewBag.Fechas"></select>
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label for="CantButacas">Cantidad de Butacas</label>
                 <input asp-for="CantButacas" class="form-control" id="CantButacas" />
                 <span asp-validation-for="CantButacas" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label for="Promocion">Aplicar Promoción</label>
+                <select asp-for="Promocion" class="form-control">
+                    <option value="false">Seleccionar promoción</option>
+                    <option value="true">50% de descuento</option>
+                </select>
+                <span asp-validation-for="Promocion" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Total" class="control-label"></label>
                 <input asp-for="Total" class="form-control" readonly />
                 <span asp-validation-for="Total" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -46,16 +58,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-<script>
-    document.getElementById("CantButacas").addEventListener("input", function (event) {
-        let cantButacas = parseInt(event.target.value, 20);
-        if (cantButacas < 0) {
-            event.target.setCustomValidity("La cantidad de butacas no puede ser negativa.");
-        } else {
-            event.target.setCustomValidity(""); // Limpia el mensaje de error si el valor es válido
-        }
-    });
-</script>
 
 <script>
     document.getElementById("IdPelicula").addEventListener("change", function () {
@@ -75,18 +77,27 @@
                 });
             });
     });
-</script>
 
-<script>
+    document.getElementById("CantButacas").addEventListener("input", function (event) {
+        let cantButacas = parseInt(event.target.value, 20);
+        if (cantButacas < 0) {
+            event.target.setCustomValidity("La cantidad de butacas no puede ser negativa.");
+        } else {
+            event.target.setCustomValidity(""); // Limpia el mensaje de error si el valor es válido
+        }
+    });
+
     // Referencias a los elementos del formulario
     const peliculaDropdown = document.getElementById("IdPelicula");
     const cantButacasInput = document.getElementById("CantButacas");
     const totalInput = document.getElementById("Total");
+    const promocionSelect = document.getElementById("Promocion");
 
     // Función para actualizar el total
     function actualizarTotal() {
         const peliculaId = peliculaDropdown.value;
         const cantButacas = parseInt(cantButacasInput.value) || 0;
+        const promocion = promocionSelect.value === "true";  // Verifica si la opción seleccionada es '50%' de descuento
 
         // Si no hay película seleccionada, no calcular
         if (!peliculaId) {
@@ -99,16 +110,25 @@
             .then(response => response.json())
             .then(precio => {
                 // Calcular el total
-                const total = precio * cantButacas;
-                totalInput.value = total.toFixed(2); // Mostrar con dos decimales
+                let total = precio * cantButacas;
+
+                // Aplicar 50% de descuento si la promoción está seleccionada
+                if (promocion) {
+                    total = total / 2;  // Aplica el descuento del 50%
+                }
+
+                totalInput.value = total.toFixed(2);  // Mostrar con dos decimales
             });
     }
 
     // Escuchar cambios en los campos relevantes
     peliculaDropdown.addEventListener("change", actualizarTotal);
     cantButacasInput.addEventListener("input", actualizarTotal);
+    promocionSelect.addEventListener("change", actualizarTotal);
 </script>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
