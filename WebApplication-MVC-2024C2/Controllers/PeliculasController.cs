@@ -160,9 +160,9 @@ namespace WebApplication_MVC_2024C2.Controllers
             var pelicula = _context.Peliculas.FirstOrDefault(p => p.Id == id);
             if (pelicula == null)
             {
-                return NotFound(); // Si no se encuentra la película, devolver un error.
+                return NotFound(); 
             }
-            return Json(pelicula.Precio); // Devolver el precio como JSON.
+            return Json(pelicula.Precio); 
         }
 
        

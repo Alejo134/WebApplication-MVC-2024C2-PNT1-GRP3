@@ -45,7 +45,6 @@ namespace WebApplication_MVC_2024C2.Controllers
                     HttpContext.Session.SetInt32("IDUsuario", user.Id);
 
 
-                    // Aquí puedes redirigir al usuario a una página protegida, como el Home
                     return RedirectToAction("Index", "Home"); // Redirigir al Home u otra página
 
                    
@@ -63,11 +62,9 @@ namespace WebApplication_MVC_2024C2.Controllers
             return View(model);
         }
 
-        // Acción para cerrar sesión (ya no se necesita manejar cookies aquí)
         [HttpPost]
         public IActionResult Logout()
         {
-            // No es necesario limpiar cookies porque no estamos usando cookies
             return RedirectToAction("Index", "Login");
         }
     }

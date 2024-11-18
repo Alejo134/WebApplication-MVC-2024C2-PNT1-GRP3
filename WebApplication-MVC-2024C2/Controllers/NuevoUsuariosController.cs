@@ -58,28 +58,24 @@ namespace WebApplication_MVC_2024C2.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Verificar si el nombre de usuario ya existe en la base de datos
                 var usuarioExistente = await _context.NuevoUsuario
                     .FirstOrDefaultAsync(u => u.Usuario == nuevoUsuario.Usuario);
 
                 if (usuarioExistente != null)
                 {
-                    // Si el nombre de usuario ya está registrado, mostrar un error
                     ModelState.AddModelError("Usuario", "Este nombre de usuario ya está registrado.");
                     return View(nuevoUsuario); // Retorna la vista con el mensaje de error
                 }
 
-                // Verificar si el correo electrónico ya está registrado en la base de datos
                 var emailExistente = await _context.NuevoUsuario
                     .FirstOrDefaultAsync(u => u.Email == nuevoUsuario.Email);
 
                 if (emailExistente != null)
                 {
-                    // Si el correo electrónico ya está registrado, mostrar un error
                     ModelState.AddModelError("Email", "Este correo electrónico ya está registrado.");
-                    return View(nuevoUsuario); // Retorna la vista con el mensaje de error
+                    return View(nuevoUsuario); 
                 }
-                //Iniciar con 1000 puntos.(antes de agregar a contaxt)
+                //Iniciar con 1000 puntos.(antes de agregar a context)
                 nuevoUsuario.Puntos = 1000;
 
                 // Si el usuario y correo son únicos, agregar el nuevo usuario

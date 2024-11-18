@@ -103,14 +103,6 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return View(venta);
             }
 
-            /* Verificar que la fecha de la venta coincida con la fecha de la película
-            if (venta.Fecha.Date != pelicula.Fecha.Date)
-            {
-                ModelState.AddModelError("Fecha", "La fecha seleccionada no coincide con la fecha disponible para la película.");
-                ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
-                ViewBag.Fechas = new SelectList(new List<DateTime> { pelicula.Fecha }, pelicula.Fecha);
-                return View(venta);
-            }*/
 
             if (venta.CantButacas < 0)
             {
@@ -151,7 +143,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             if (ModelState.IsValid)
             {
                 Console.WriteLine($"Promocion: {venta.Promocion}");
-                var userId = HttpContext.Session.GetInt32("IDUsuario"); // Recuperar el ID del usuario logueado
+                var userId = HttpContext.Session.GetInt32("IDUsuario"); 
 
                 if (userId == null)
                 {
@@ -161,14 +153,14 @@ namespace WebApplication_MVC_2024C2.Controllers
                     //break?
                 }
                 
-                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId); // Obtener usuario
+                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId); 
 
                 if (usuario != null)
                     if (!venta.Promocion)
                     {
 
 
-                        usuario.Puntos += 200;  // Suma 200 puntos
+                        usuario.Puntos += 200;  
                         _context.Update(usuario);
 
 
@@ -195,7 +187,6 @@ namespace WebApplication_MVC_2024C2.Controllers
 
 
             }
-            // Depuración: mostrar todos los errores del modelo
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
             {
                 Console.WriteLine($"Error: {error.ErrorMessage}");
@@ -218,7 +209,6 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return Json(new List<DateTime>());
             }
 
-            // Devuelve la fecha de la película (o ajusta si necesitas más de una fecha)
             return Json(new List<DateTime> { pelicula.Fecha });
         }
         [HttpGet]
@@ -228,7 +218,7 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             if (pelicula == null)
             {
-                return Json(0); // Si no se encuentra, devuelve 0
+                return Json(0); 
             }
 
             return Json(pelicula.Precio);

@@ -21,7 +21,6 @@ namespace WebApplication_MVC_2024C2.Models
 
 
 
-        //public Pelicula Pelicula { get; set; }
 
 
     }
