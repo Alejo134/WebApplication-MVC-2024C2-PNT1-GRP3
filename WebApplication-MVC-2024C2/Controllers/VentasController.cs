@@ -347,5 +347,21 @@ namespace WebApplication_MVC_2024C2.Controllers
         {
             return _context.Ventas.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public IActionResult RedirectToCreate(int peliculaId)
+        {
+            // Verificar si el usuario está logueado
+            var userId = HttpContext.Session.GetInt32("IDUsuario");
+            if (userId == null)
+            {
+                // Guardar película seleccionada en la sesión para usar después del login
+                HttpContext.Session.SetInt32("PeliculaSeleccionada", peliculaId);
+                return RedirectToAction("Index", "Login");
+            }
+
+            // Redirigir directamente al formulario de ventas con la película seleccionada
+            return RedirectToAction("Create", new { peliculaId });
+        }
     }
 }

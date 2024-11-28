@@ -9,6 +9,8 @@ namespace WebApplication_MVC_2024C2.Models
 
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [DataType(DataType.Password)]
+
+        [Display(Name = "Contraseña")]
         public string Contraseña { get; set; }
 
 

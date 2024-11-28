@@ -26,38 +26,34 @@ namespace WebApplication_MVC_2024C2.Controllers
 
         // Acción POST para procesar el login
         [HttpPost]
-        public async Task<IActionResult> Index(LoginModel model)
+        public IActionResult Index(LoginModel model)
         {
-            // Validar si el modelo es válido
             if (ModelState.IsValid)
             {
-                // Validación de credenciales en la base de datos
-                var user = await _context.NuevoUsuario
-                                         .SingleOrDefaultAsync(u => u.Usuario == model.Usuario && u.Contrasenia == model.Contraseña);
+                var usuario = _context.NuevoUsuario
+                    .FirstOrDefault(u => u.Usuario == model.Usuario && u.Contrasenia == model.Contraseña);
 
-                if (user != null)
+                if (usuario != null)
                 {
+                    // Guardar información del usuario en la sesión
+                    HttpContext.Session.SetInt32("IDUsuario", usuario.Id);
 
+                    // Verificar si hay una película seleccionada
+                    var peliculaId = HttpContext.Session.GetInt32("PeliculaSeleccionada");
+                    if (peliculaId.HasValue)
+                    {
+                        // Limpiar la sesión y redirigir al formulario de ventas
+                        HttpContext.Session.Remove("PeliculaSeleccionada");
+                        return RedirectToAction("Create", "Ventas", new { peliculaId = peliculaId.Value });
+                    }
 
-                    model.IDUsuario = user.Id;
-
-                    HttpContext.Session.SetInt32("IDUsuario", user.Id);
-
-
-                    return RedirectToAction("Index", "Home"); // Redirigir al Home u otra página
-
-                   
-
-
+                    // Si no hay película seleccionada, redirigir a la página principal
+                    return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    // Si las credenciales no coinciden, agregar un error
-                    ModelState.AddModelError("", "Credenciales incorrectas");
-                }
+
+                ModelState.AddModelError("", "Credenciales incorrectas.");
             }
 
-            // Si el modelo no es válido, se retorna la vista de nuevo
             return View(model);
         }
 

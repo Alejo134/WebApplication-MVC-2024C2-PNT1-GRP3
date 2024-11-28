@@ -13,6 +13,8 @@ namespace WebApplication_MVC_2024C2.Models
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 6, ErrorMessage = "La contraseña debe tener entre 6 y 50 caracteres")]
+
+        [Display(Name = "Contraseña")]
         public string Contrasenia { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico es obligatorio")]

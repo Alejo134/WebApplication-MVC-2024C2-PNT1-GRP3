@@ -19,7 +19,10 @@
         <span asp-validation-for="Contraseña" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Ingresar</button>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+        <a href="https://localhost:7277/NuevoUsuarios/Create" class="btn btn-secondary">Crear nueva cuenta</a>
+    </div>
 </form>
 
 @if (!ViewData.ModelState.IsValid)
