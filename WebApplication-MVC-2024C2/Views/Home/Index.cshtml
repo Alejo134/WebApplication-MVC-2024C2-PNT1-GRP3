@@ -4,53 +4,51 @@
 }
 
 <body class="text-center">
-    <!-- 
-    <h2>Iniciar Sesión</h2>
-    <form asp-action="Index" method="post" class="form-signin">
-        <div class="form-group">
-            <label for="Usuario" class="sr-only">Usuario</label>
-            <input asp-for="Usuario" class="form-control" id="Usuario" required />
-            <span asp-validation-for="Usuario" class="text-danger"></span>
-        </div>
-        
-        <div class="form-group">
-            <label for="Contraseña" class="sr-only">Password</label>
-            <input asp-for="Contraseña" type="password" class="form-control" id="Contraseña" required />
-            <span asp-validation-for="Contraseña" class="text-danger"></span>
-        </div>
-        
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div
-        
-         <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
-    </form>
-    <div>
-        <p>¿No tienes cuenta? <a href="../Views/NuevoUsuarios/Create.cshtml">Registrate!!</a></p>
-    </div>
+    <!--
+       <h2>Iniciar Sesión</h2>
+       <form asp-action="Index" method="post" class="form-signin">
+           <div class="form-group">
+               <label for="Usuario" class="sr-only">Usuario</label>
+               <input asp-for="Usuario" class="form-control" id="Usuario" required />
+               <span asp-validation-for="Usuario" class="text-danger"></span>
+           </div>
 
-    -->
+           <div class="form-group">
+               <label for="Contraseña" class="sr-only">Password</label>
+               <input asp-for="Contraseña" type="password" class="form-control" id="Contraseña" required />
+               <span asp-validation-for="Contraseña" class="text-danger"></span>
+           </div>
 
-    <h1>PÁGINA DE INICIO</h1>
+           <div class="checkbox mb-3">
+               <label>
+                   <input type="checkbox" value="remember-me"> Remember me
+               </label>
+           </div
 
-    <div class="container mt-5">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+       </form>
+       <div>
+           <p>¿No tienes cuenta? <a href="../Views/NuevoUsuarios/Create.cshtml">Registrate!!</a></p>
+       </div>
+
+
+
+            <div class="container mt-5">
         <h1 class="text-center">Cartelera</h1>
         <div class="row">
-            @if (cartelera != null && cartelera.Any())
+            if (cartelera != null && cartelera.Any())
             {
                 foreach (var pelicula in cartelera)
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5 class="card-title">@pelicula.Titulo</h5>
-                                <p class="card-text text-truncate">@pelicula.Descripcion</p>
-                                <p class="text-muted">@pelicula.Clasificacion</p>
-                                <p class="text-muted">@pelicula.Fecha</p>
-                                <p class="text-muted">@pelicula.CantButacas</p>
-                                <p class="text-muted">@pelicula.Precio</p>
+                                <h5 class="card-title">pelicula.Titulo</h5>
+                                <p class="card-text text-truncate">pelicula.Descripcion</p>
+                                <p class="text-muted">pelicula.Clasificacion</p>
+                                <p class="text-muted">pelicula.Fecha</p>
+                                <p class="text-muted">pelicula.CantButacas</p>
+                                <p class="text-muted">pelicula.Precio</p>
                             </div>
                             <div class="card-footer text-center">
                                 <a class="btn btn-danger" href="">Comprar entradas</a>
@@ -65,6 +63,12 @@
             }
         </div>
     </div>
+
+       -->
+
+    <h1>PÁGINA DE INICIO</h1>
+
+
 
 
 </body>
