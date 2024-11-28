@@ -1,6 +1,6 @@
-﻿@model WebApplication_MVC_2024C2.Models.LoginModel
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
+    var cartelera = ViewBag.Cartelera as IEnumerable<WebApplication_MVC_2024C2.Models.Pelicula>;
 }
 
 <body class="text-center">
@@ -34,6 +34,39 @@
     -->
 
     <h1>PÁGINA DE INICIO</h1>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Cartelera</h1>
+        <div class="row">
+            @if (cartelera != null && cartelera.Any())
+            {
+                foreach (var pelicula in cartelera)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">@pelicula.Titulo</h5>
+                                <p class="card-text text-truncate">@pelicula.Descripcion</p>
+                                <p class="text-muted">@pelicula.Clasificacion</p>
+                                <p class="text-muted">@pelicula.Fecha</p>
+                                <p class="text-muted">@pelicula.CantButacas</p>
+                                <p class="text-muted">@pelicula.Precio</p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a class="btn btn-danger" href="">Comprar entradas</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center">No hay películas disponibles en la cartelera.</p>
+            }
+        </div>
+    </div>
+
+
 </body>
 
 

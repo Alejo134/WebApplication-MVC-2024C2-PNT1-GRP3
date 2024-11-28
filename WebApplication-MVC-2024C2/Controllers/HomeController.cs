@@ -7,14 +7,19 @@ namespace WebApplication_MVC_2024C2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly PeliculasController _peliculasController;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, PeliculasController peliculasController)
         {
+            _peliculasController = peliculasController;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            var peliculas = _peliculasController.Index(); // Llama al método Index de PeliculasController
+            ViewBag.Cartelera = peliculas;
             return View();
         }
 
