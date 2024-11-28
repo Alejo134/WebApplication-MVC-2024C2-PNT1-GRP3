@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    var cartelera = ViewBag.Cartelera as IEnumerable<WebApplication_MVC_2024C2.Models.Pelicula>;
+    var peliculas = ViewBag.Cartelera as List<WebApplication_MVC_2024C2.Models.Pelicula>;
 }
 
 <body class="text-center">
@@ -30,44 +30,41 @@
        <div>
            <p>¿No tienes cuenta? <a href="../Views/NuevoUsuarios/Create.cshtml">Registrate!!</a></p>
        </div>
-
-
-
-            <div class="container mt-5">
-        <h1 class="text-center">Cartelera</h1>
-        <div class="row">
-            if (cartelera != null && cartelera.Any())
-            {
-                foreach (var pelicula in cartelera)
-                {
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">pelicula.Titulo</h5>
-                                <p class="card-text text-truncate">pelicula.Descripcion</p>
-                                <p class="text-muted">pelicula.Clasificacion</p>
-                                <p class="text-muted">pelicula.Fecha</p>
-                                <p class="text-muted">pelicula.CantButacas</p>
-                                <p class="text-muted">pelicula.Precio</p>
-                            </div>
-                            <div class="card-footer text-center">
-                                <a class="btn btn-danger" href="">Comprar entradas</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <p class="text-center">No hay películas disponibles en la cartelera.</p>
-            }
-        </div>
-    </div>
-
        -->
 
     <h1>PÁGINA DE INICIO</h1>
 
+
+    <h1>Cartelera de Películas</h1>
+
+    @if (peliculas != null && peliculas.Any())
+    {
+        <div class="row">
+            @foreach (var pelicula in peliculas)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">@pelicula.Titulo</h5>
+                            <p class="card-text"><strong>Descripción:</strong> @pelicula.Descripcion</p>
+                            <p class="card-text"><strong>Clasificación:</strong> @pelicula.Clasificacion</p>
+                            <p class="card-text"><strong>Número de Sala:</strong> @pelicula.NroDeSala</p>
+                            <p class="card-text"><strong>Fecha:</strong> @pelicula.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+                            <p class="card-text"><strong>Precio:</strong> $@pelicula.Precio</p>
+                            <p class="card-text"><strong>Cantidad de Butacas:</strong> @pelicula.CantButacas</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Sala: @pelicula.NroDeSala</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No hay películas disponibles en este momento.</p>
+    }
 
 
 
