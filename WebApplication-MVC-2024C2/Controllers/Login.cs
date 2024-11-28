@@ -36,7 +36,6 @@ namespace WebApplication_MVC_2024C2.Controllers
                                          .SingleOrDefaultAsync(u => u.Usuario == model.Usuario && u.Contrasenia == model.Contraseña);
 
                 if (user != null)
-
                 {
 
 
