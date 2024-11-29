@@ -25,7 +25,15 @@
                         <li class="nav-item"> <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Iniciar Sesión</a> </li>
                        <!--<li class="nav-item"> <a class="nav-link text-dark" asp-area="" asp-controller="Peliculas" asp-action="Index">Pelicula</a> </li> -->                        
                         <li class="nav-item"> <a class="nav-link text-dark" asp-area="" asp-controller="NuevoUsuarios" asp-action="Index">Registrarse</a> </li>
-                        <li class="nav-item"> <a class="nav-link text-dark" asp-area="" asp-controller="Ventas" asp-action="Index">Comprar Entrada</a> </li>
+
+                        <li class="nav-item"> 
+                            <form class="nav-link text-dark" 
+                            asp-area="" 
+                            asp-controller="Ventas" 
+                            asp-action="RedirectToCreate">
+                                <button class="boton-main" type="submit">Comprar Entrada</button
+                            </form> 
+                        </li>
                         
                         <!--<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
