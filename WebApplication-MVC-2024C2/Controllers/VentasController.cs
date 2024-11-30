@@ -47,15 +47,40 @@ namespace WebApplication_MVC_2024C2.Controllers
             return View(venta);
         }
 
-        // GET: Ventas/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? peliculaId)
         {
             // Obtener las películas desde la base de datos
             var peliculas = await _context.Peliculas.ToListAsync();
 
-            // Si no hay películas, redirigir o mostrar un mensaje de error
+            // Si no hay películas en la base de datos, mostrar un mensaje o redirigir
             if (!peliculas.Any())
             {
+                TempData["ErrorMessage"] = "No hay películas disponibles.";
+                return RedirectToAction(nameof(Index)); // O puedes redirigir a otra acción si prefieres
+            }
+
+            int selectedPeliculaId;
+
+            if (peliculaId.HasValue)
+            {
+                // Si se pasa un ID de película, usar ese ID
+                selectedPeliculaId = peliculaId.Value;
+            }
+            else
+            {
+                // Si no se pasa un ID de película, mostrar la lista de películas
+                selectedPeliculaId = 0; // Indicamos que no hay una película seleccionada
+            }
+
+            // Obtener la película seleccionada si se pasa un ID
+            var peliculaSeleccionada = selectedPeliculaId > 0
+                ? await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == selectedPeliculaId)
+                : null;
+
+            // Si la película seleccionada no existe, redirigir
+            if (peliculaSeleccionada == null && selectedPeliculaId > 0)
+            {
+                TempData["ErrorMessage"] = "Película no encontrada. Por favor, selecciona una película válida.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -70,28 +95,24 @@ namespace WebApplication_MVC_2024C2.Controllers
                 }
             }
 
-            // Cargar las películas en el ViewBag
-            ViewBag.Peliculas = new SelectList(peliculas, "Id", "Titulo");
+            // Cargar las películas en el ViewBag para la lista desplegable (solo si no se seleccionó una película)
+            ViewBag.Peliculas = new SelectList(peliculas, "Id", "Titulo", peliculaSeleccionada?.Id);
 
-            // Inicialmente, las fechas estarán vacías hasta que se seleccione una película
-            ViewBag.Fechas = new SelectList(Enumerable.Empty<DateTime>());
+            // Establecer las fechas en el ViewBag según la película seleccionada, si se seleccionó una
+            ViewBag.Fechas = selectedPeliculaId > 0
+                ? new SelectList(new List<DateTime> { peliculaSeleccionada.Fecha }, peliculaSeleccionada.Fecha)
+                : new SelectList(Enumerable.Empty<DateTime>());
 
             return View();
         }
 
-        // POST: Ventas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula,Promocion")] Venta venta)
-
-
         {
-
-            // Agregar para depuración
-            Console.WriteLine("Entra a la acción Create");
-
             // Validar que la película seleccionada existe
             var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == venta.IdPelicula);
 
@@ -102,7 +123,6 @@ namespace WebApplication_MVC_2024C2.Controllers
                 ViewBag.Fechas = new SelectList(Enumerable.Empty<DateTime>());
                 return View(venta);
             }
-
 
             if (venta.CantButacas < 0)
             {
@@ -120,15 +140,11 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return View(venta);
             }
 
-            // Asignar la película a la propiedad 'Pelicula' de la venta
-           // venta.Pelicula = pelicula;
-
+            // Asignar la película y la fecha a la propiedad de la venta
             venta.IdPelicula = pelicula.Id;
-            
+            venta.Fecha = pelicula.Fecha;
 
             // Calcular el total basado en la película seleccionada
-            // venta.Total = pelicula.Precio * venta.CantButacas;
-            // Calcula el total
             if (venta.Promocion)
             {
                 // Si se aplica la promoción 2x1, el total es la mitad
@@ -142,56 +158,38 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             if (ModelState.IsValid)
             {
-                Console.WriteLine($"Promocion: {venta.Promocion}");
-                var userId = HttpContext.Session.GetInt32("IDUsuario"); 
-
+                // Guardar la venta y actualizar la película
+                var userId = HttpContext.Session.GetInt32("IDUsuario");
                 if (userId == null)
                 {
                     ModelState.AddModelError("", "Debe iniciar sesión para realizar una venta.");
                     return View(venta);
-
-                    //break?
                 }
-                
-                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId); 
 
+                var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId);
                 if (usuario != null)
+                {
                     if (!venta.Promocion)
                     {
-
-
-                        usuario.Puntos += 200;  
+                        usuario.Puntos += 200;
                         _context.Update(usuario);
-
-
-                    } else {
-
+                    }
+                    else
+                    {
                         usuario.Puntos -= 1000;
                         _context.Update(usuario);
-
                     }
+                }
 
-
-                
                 venta.IDUsuario = userId.Value;
-
                 pelicula.CantButacas -= venta.CantButacas;
-                
                 _context.Update(pelicula);
                 _context.Add(venta);
 
                 await _context.SaveChangesAsync();
-                Console.WriteLine($"Guardando venta: {venta.IdPelicula}, {venta.Fecha}, {venta.CantButacas}, {venta.Total}");
 
                 return RedirectToAction(nameof(Index));
-
-
             }
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine($"Error: {error.ErrorMessage}");
-            }
-
 
             // Si hay un error, recargar las listas para la vista
             ViewBag.Peliculas = new SelectList(await _context.Peliculas.ToListAsync(), "Id", "Titulo");
@@ -363,5 +361,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             // Redirigir directamente al formulario de ventas con la película seleccionada
             return RedirectToAction("Create", new { peliculaId });
         }
+
     }
+
 }

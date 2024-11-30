@@ -13,12 +13,12 @@
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label for="IdPelicula">Película</label>
-                <select asp-for="IdPelicula" class="form-control" asp-items="ViewBag.Peliculas">
+                <select asp-for="IdPelicula" class="form-control" asp-items="@ViewBag.Peliculas">
                     <option value="">Seleccione una película</option>
                 </select>
-                <span asp-validation-for="IdPelicula" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -29,8 +29,7 @@
 
             <div class="form-group">
                 <label class="control-label" for="CantButacas">Cantidad de Butacas</label>
-                <input asp-for="CantButacas" class="form-control" type="number"
-                       min="0" max="10" required />
+                <input asp-for="CantButacas" class="form-control" type="number" min="1" max="10" required />
                 <span asp-validation-for="CantButacas" class="text-danger"></span>
             </div>
 
@@ -42,7 +41,6 @@
                 </select>
                 <span asp-validation-for="Promocion" class="text-danger"></span>
             </div>
-
 
             <div class="form-group">
                 <label for="PuntosUsuario">Puntos disponibles</label>
@@ -56,17 +54,18 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Crear Venta" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver a la lista</a>
 </div>
 
 <script>
+    // Actualizar las fechas disponibles al seleccionar una película
     document.getElementById("IdPelicula").addEventListener("change", function () {
         var peliculaId = this.value;
 
@@ -83,31 +82,20 @@
                     fechaDropdown.appendChild(option);
                 });
             });
+
+        // Actualizar el total después de seleccionar la película
+        actualizarTotal();
     });
 
-    document.getElementById("CantButacas").addEventListener("input", function (event) {
-        let cantButacas = parseInt(event.target.value, 20);
-        if (cantButacas < 0) {
-            event.target.setCustomValidity("La cantidad de butacas no puede ser negativa.");
-        } else {
-            event.target.setCustomValidity(""); // Limpia el mensaje de error si el valor es válido
-        }
-    });
-
-    // Referencias a los elementos del formulario
-    const peliculaDropdown = document.getElementById("IdPelicula");
-    const cantButacasInput = document.getElementById("CantButacas");
-    const totalInput = document.getElementById("Total");
-    const promocionSelect = document.getElementById("Promocion");
-    const puntosUsuarioInput = document.getElementById("PuntosUsuario");
-
-     // Función para actualizar el total
+    // Función para actualizar el total basado en la selección
     function actualizarTotal() {
-        const peliculaId = peliculaDropdown.value;
-        const cantButacas = parseInt(cantButacasInput.value) || 0;
-        const promocion = promocionSelect.value === "true";  // Verifica si la opción seleccionada es '50%' de descuento
+        const peliculaId = document.getElementById("IdPelicula").value;
+        const cantButacas = parseInt(document.getElementById("CantButacas").value) || 0;
+        const promocion = document.getElementById("Promocion").value === "true";
+        const puntosUsuario = parseInt(document.getElementById("PuntosUsuario").value) || 0;
+        const totalInput = document.getElementById("Total");
 
-        // Si no hay película seleccionada, no calcular
+        // Si no hay película seleccionada o la cantidad de butacas es 0, no calcular
         if (!peliculaId || cantButacas <= 0) {
             totalInput.value = "";
             return;
@@ -117,33 +105,27 @@
         fetch(`/Ventas/GetPrecioByPelicula/${peliculaId}`)
             .then(response => response.json())
             .then(precio => {
-                let total = precio * cantButacas;  // Calcula el total sin descuento
+                let total = precio * cantButacas; // Total sin descuento
 
-                // Verificar si la promoción es válida
-                if (promocion) {
-                    const puntosUsuario = parseInt(puntosUsuarioInput.value) || 0;
-                    if (puntosUsuario < 1000) {
-                        alert("No tienes suficientes puntos para aplicar la promoción.");
-                        promocionSelect.value = "false";  // Desmarcar la opción de promoción
-                        total = precio * cantButacas;  // Volver al precio original
-                    } else {
-                        total = total / 2;  // Aplica el descuento del 50%
-                    }
+                // Aplicar descuento si hay promoción
+                if (promocion && puntosUsuario >= 1000) {
+                    total = total / 2;  // Aplica 50% de descuento
+                } else if (promocion && puntosUsuario < 1000) {
+                    alert("No tienes suficientes puntos para aplicar la promoción.");
+                    document.getElementById("Promocion").value = "false";  // Quitar la promoción
+                    total = precio * cantButacas;  // Volver al precio original
                 }
 
-                totalInput.value = total.toFixed(2);  // Mostrar con dos decimales
+                totalInput.value = total.toFixed(2); // Mostrar el total con 2 decimales
             });
     }
 
-    // Escuchar cambios en los campos relevantes
-    peliculaDropdown.addEventListener("change", actualizarTotal);
-    cantButacasInput.addEventListener("input", actualizarTotal);
-    promocionSelect.addEventListener("change", actualizarTotal);
 
+    // Escuchar cambios en los campos relevantes para actualizar el total
+    document.getElementById("CantButacas").addEventListener("input", actualizarTotal);
+    document.getElementById("Promocion").addEventListener("change", actualizarTotal);
 </script>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+
+
+

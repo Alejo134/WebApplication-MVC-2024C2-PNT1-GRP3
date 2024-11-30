@@ -4,37 +4,7 @@
 }
 
 <body class="text-center">
-    <!--
-       <h2>Iniciar Sesión</h2>
-       <form asp-action="Index" method="post" class="form-signin">
-           <div class="form-group">
-               <label for="Usuario" class="sr-only">Usuario</label>
-               <input asp-for="Usuario" class="form-control" id="Usuario" required />
-               <span asp-validation-for="Usuario" class="text-danger"></span>
-           </div>
-
-           <div class="form-group">
-               <label for="Contraseña" class="sr-only">Password</label>
-               <input asp-for="Contraseña" type="password" class="form-control" id="Contraseña" required />
-               <span asp-validation-for="Contraseña" class="text-danger"></span>
-           </div>
-
-           <div class="checkbox mb-3">
-               <label>
-                   <input type="checkbox" value="remember-me"> Remember me
-               </label>
-           </div
-
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
-       </form>
-       <div>
-           <p>¿No tienes cuenta? <a href="../Views/NuevoUsuarios/Create.cshtml">Registrate!!</a></p>
-       </div>
-       -->
-
     <h1>PÁGINA DE INICIO</h1>
-
-
     <h1>Cartelera de Películas</h1>
 
     @if (peliculas != null && peliculas.Any())
@@ -52,13 +22,16 @@
                             <p class="card-text"><strong>Fecha:</strong> @pelicula.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
                             <p class="card-text"><strong>Precio:</strong> $@pelicula.Precio</p>
                             <p class="card-text"><strong>Cantidad de Butacas:</strong> @pelicula.CantButacas</p>
+
+                            <!-- Formulario para enviar el Id de la película seleccionada -->
                             <form asp-controller="Ventas" asp-action="RedirectToCreate" method="post">
+                                <!-- Campo oculto para enviar el Id de la película -->
                                 <input type="hidden" name="peliculaId" value="@pelicula.Id" />
                                 <button class="btn btn-primary btn-block" type="submit">Reservar</button>
                             </form>
                         </div>
                     </div>
-                 </div>
+                </div>
             }
         </div>
     }
@@ -67,12 +40,6 @@
         <p>No hay películas disponibles en este momento.</p>
     }
 
-
-
 </body>
 
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <p style="color:red">Credenciales incorrectas</p>
-}
