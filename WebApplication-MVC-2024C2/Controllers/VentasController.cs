@@ -47,6 +47,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             return View(venta);
         }
 
+        // GET: Ventas/Create
         public async Task<IActionResult> Create(int? peliculaId)
         {
             // Obtener las películas desde la base de datos
@@ -106,9 +107,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             return View();
         }
 
-
-
-
+        // POST: Ventas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula,Promocion")] Venta venta)
