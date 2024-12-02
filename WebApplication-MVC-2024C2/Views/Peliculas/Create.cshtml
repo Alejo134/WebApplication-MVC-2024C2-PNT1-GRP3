@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label asp-for="Clasificacion" class="control-label"></label>
-                <input asp-for="Clasificacion" class="form-control" />
+                <select asp-for="Clasificacion" class="form-control" asp-items="Html.GetEnumSelectList<WebApplication_MVC_2024C2.Models.Clasificacion>()"></select>
                 <span asp-validation-for="Clasificacion" class="text-danger"></span>
             </div>
 
