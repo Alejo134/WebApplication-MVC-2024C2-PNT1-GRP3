@@ -54,7 +54,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Reservar Entrada" class="btn btn-primary" />
+                <input type="submit" value="Crear Venta" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -82,6 +82,41 @@
                     fechaDropdown.appendChild(option);
                 });
             });
+
+        // Verificar que una película ha sido seleccionada
+        if (peliculaId) {
+            fetch('/Ventas/GetFechasByPelicula/' + peliculaId)
+                .then(response => response.json())
+                .then(data => {
+                    var fechaDropdown = document.getElementById("Fecha");
+                    fechaDropdown.innerHTML = ""; // Limpiar las opciones anteriores
+
+                    if (data.length > 0) {
+                        data.forEach(fecha => {
+                            var option = document.createElement("option");
+                            option.value = fecha;  // Usar la fecha como valor
+                            option.textContent = new Date(fecha).toLocaleString();  // Mostrar fecha con formato "dd/MM/yyyy HH:mm"
+                            fechaDropdown.appendChild(option);
+                        });
+                    } else {
+                        var option = document.createElement("option");
+                        option.value = "";
+                        option.textContent = "No hay fechas disponibles";
+                        fechaDropdown.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al obtener las fechas:", error);
+                });
+        } else {
+            // Si no se selecciona una película, limpiar las fechas
+            var fechaDropdown = document.getElementById("Fecha");
+            fechaDropdown.innerHTML = "";
+            var option = document.createElement("option");
+            option.value = "";
+            option.textContent = "Seleccione una película primero";
+            fechaDropdown.appendChild(option);
+        }
 
         // Actualizar el total después de seleccionar la película
         actualizarTotal();

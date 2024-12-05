@@ -106,11 +106,16 @@ namespace WebApplication_MVC_2024C2.Controllers
             // Cargar las películas en el ViewBag para la lista desplegable (solo si no se seleccionó una película)
             ViewBag.Peliculas = new SelectList(peliculas, "Id", "Titulo", peliculaSeleccionada?.Id);
 
-            // Establecer las fechas en el ViewBag según la película seleccionada, si se seleccionó una
-            ViewBag.Fechas = selectedPeliculaId > 0
-                ? new SelectList(new List<DateTime> { peliculaSeleccionada.Fecha }, peliculaSeleccionada.Fecha)
-                : new SelectList(Enumerable.Empty<DateTime>());
+            if (peliculaSeleccionada != null)
+            {
+                // Formatear la fecha con hora en el formato adecuado
+                var fechaConHora = peliculaSeleccionada.Fecha.ToString("yyyy-MM-dd HH:mm");
 
+                // Establecer las fechas en el ViewBag según la película seleccionada, si se seleccionó una
+                ViewBag.Fechas = selectedPeliculaId > 0
+                    ? new SelectList(new List<DateTime> { peliculaSeleccionada.Fecha }, peliculaSeleccionada.Fecha)
+                    : new SelectList(Enumerable.Empty<DateTime>());
+            }
             return View();
         }
 
@@ -211,11 +216,15 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             if (pelicula == null)
             {
-                return Json(new List<DateTime>());
+                return Json(new List<string>());  // Devolver una lista vacía si no se encuentra la película
             }
 
-            return Json(new List<DateTime> { pelicula.Fecha });
+            // Asegúrate de que la fecha está en formato string, incluyendo la hora
+            var fechaConHora = pelicula.Fecha.ToString("yyyy-MM-dd HH:mm");
+            return Json(new List<string> { fechaConHora });  // Devolver la fecha con hora como string
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetPrecioByPelicula(int id)
