@@ -44,6 +44,13 @@ namespace WebApplication_MVC_2024C2.Controllers
                 return NotFound();
             }
 
+            // Obtener la película asociada a la venta usando el IdPelicula
+            var pelicula = _context.Peliculas
+                .FirstOrDefault(p => p.Id == venta.IdPelicula);
+
+            // Pasar el título de la película al ViewData
+            ViewData["PeliculaTitulo"] = pelicula?.Titulo;
+
             return View(venta);
         }
 
@@ -187,7 +194,8 @@ namespace WebApplication_MVC_2024C2.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = venta.Id });
+
             }
 
             // Si hay un error, recargar las listas para la vista
@@ -208,6 +216,7 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             return Json(new List<DateTime> { pelicula.Fecha });
         }
+
         [HttpGet]
         public async Task<IActionResult> GetPrecioByPelicula(int id)
         {

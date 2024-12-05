@@ -4,39 +4,185 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Gracias Por Su Compra</h1>
 
 <div>
-    <h4>Venta</h4>
+    <!--<h4>Venta</h4>-->
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+
+        <!-- <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IdPelicula)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IdPelicula)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd> -->
+
+        <dt class="col-sm-2">
+            Título de la Película
+        </dt>
+        <dd class="col-sm-10">
+            @ViewData["PeliculaTitulo"]
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Fecha)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Fecha)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CantButacas)
+        <dt class="col-sm-2">
+            Butacas Reservadas
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CantButacas)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Total)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Total)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- Botón "Volver al Inicio" -->
+    <a href="/Home/Index" class="btn btn-blue">Volver al Inicio</a>
+
+    <!-- Formulario para eliminar con primer mensaje flotante -->
+    <form id="deleteForm" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="handleDelete(event)">
+        <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+    </form>
+
+    <!-- Modal de confirmación para cancelar la reserva -->
+    <div id="confirmCancelModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeCancelModal()">&times;</span>
+            <p>¿Seguro desea cancelar su reserva?</p>
+            <button onclick="continueDelete()">Sí</button>
+            <!-- Botón "No" para volver a los detalles -->
+            <button onclick="goBackToDetails()">No</button>
+        </div>
+    </div>
+
+    <!-- Modal flotante para devolución confirmada -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Devolución confirmada, su dinero y puntos serán reembolsados en breve, será redirigido al inicio.</p>
+        </div>
+    </div>
+
+    <!-- Estilo para los modales -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        button {
+            margin: 10px;
+        }
+
+        /* Estilo para el botón "Volver al Inicio" */
+        .btn-blue {
+            background-color: #007bff; /* Azul */
+            border-color: #007bff;
+            color: white;
+        }
+
+            .btn-blue:hover {
+                background-color: #0056b3; 
+                border-color: #004085;
+            }
+    </style>
+
+    <!-- JavaScript para manejar el flujo -->
+    <script>
+        // Mostrar el primer modal de confirmación (¿Seguro desea cancelar?)
+        function handleDelete(event) {
+            event.preventDefault();  // Prevenir el envío normal del formulario
+            document.getElementById("confirmCancelModal").style.display = "block"; // Mostrar confirmación
+        }
+
+        // Si el usuario confirma la eliminación, mostrar el segundo modal de devolución confirmada
+        function continueDelete() {
+            // Cerrar el modal de confirmación
+            document.getElementById("confirmCancelModal").style.display = "none";
+
+            // Mostrar el mensaje flotante de confirmación
+            document.getElementById("confirmationModal").style.display = "block";
+
+            // Enviar el formulario con AJAX
+            var form = document.getElementById("deleteForm");
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirigir al Home después de 3 segundos
+                        setTimeout(function () {
+                            window.location.href = "/Home/Index";  // Redirige al Home
+                        }, 3000);  // Tiempo de espera de 3 segundos
+                    } else {
+                        alert("Error al eliminar la venta.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Hubo un problema al procesar la solicitud.");
+                });
+        }
+
+        // Si el usuario decide no eliminar, cerrar el modal y regresar a los detalles
+        function goBackToDetails() {
+            document.getElementById("confirmCancelModal").style.display = "none"; // Cerrar el modal
+            var id = '@Model.Id';  // Obtener el ID dinámicamente con Razor
+            window.location.href = '@Url.Action("Details", "Ventas", new { id = "__ID__" })'.replace('__ID__', id);  // Redirigir a Ventas/Details
+        }
+
+        // Función para cerrar el modal de devolución confirmada
+        function closeModal() {
+            document.getElementById("confirmationModal").style.display = "none";
+        }
+
+        // Función para cerrar el modal de cancelación
+        function closeCancelModal() {
+            document.getElementById("confirmCancelModal").style.display = "none";
+        }
+    </script>
+
 </div>
+
