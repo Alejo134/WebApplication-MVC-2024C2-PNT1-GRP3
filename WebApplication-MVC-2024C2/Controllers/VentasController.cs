@@ -108,14 +108,12 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             if (peliculaSeleccionada != null)
             {
-                // Formatear la fecha con hora en el formato adecuado
-                var fechaConHora = peliculaSeleccionada.Fecha.ToString("yyyy-MM-dd HH:mm");
-
                 // Establecer las fechas en el ViewBag según la película seleccionada, si se seleccionó una
                 ViewBag.Fechas = selectedPeliculaId > 0
                     ? new SelectList(new List<DateTime> { peliculaSeleccionada.Fecha }, peliculaSeleccionada.Fecha)
                     : new SelectList(Enumerable.Empty<DateTime>());
             }
+
             return View();
         }
 
