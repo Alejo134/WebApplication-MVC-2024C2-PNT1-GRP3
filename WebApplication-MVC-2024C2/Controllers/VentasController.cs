@@ -216,15 +216,11 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             if (pelicula == null)
             {
-                return Json(new List<string>());  // Devolver una lista vacía si no se encuentra la película
+                return Json(new List<DateTime>());
             }
 
-            // Asegúrate de que la fecha está en formato string, incluyendo la hora
-            var fechaConHora = pelicula.Fecha.ToString("yyyy-MM-dd HH:mm");
-            return Json(new List<string> { fechaConHora });  // Devolver la fecha con hora como string
+            return Json(new List<DateTime> { pelicula.Fecha });
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> GetPrecioByPelicula(int id)
@@ -238,7 +234,6 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             return Json(pelicula.Precio);
         }
-
 
         // GET: Ventas/Edit/5
         public async Task<IActionResult> Edit(int? id)
