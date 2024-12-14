@@ -8,9 +8,14 @@ html {
   }
 }
 
-.boton-main{
+
+
+
+.boton-main {
     border: none;
     background: none;
+    font-weight: bold;
+    color: var(--brown-dark);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -22,9 +27,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
 
 .form-signin {
     width: 100%;
@@ -64,4 +66,110 @@ body {
 
 .titulo-cartelera{
     padding: 20px;
+}
+
+
+
+/* NUEVO CSS
+
+*/
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Colores de la paleta */
+:root {
+    --brown-dark: #4a2c2a;
+    --brown-medium: #7e4e3d;
+    --brown-light: #e4c1a9;
+    --gold: #d9a760;
+    --cream: #f9f4e3;
+}
+
+/* Estilos globales */
+body {
+    background-color: var(--brown-light);
+    color: var(--brown-dark);
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+header .navbar {
+    background-color: var(--brown-dark);
+    border-bottom: 4px solid var(--gold);
+}
+
+.navbar-brand {
+    color: var(--cream) !important;
+}
+
+.navbar-toggler {
+    border: 1px solid var(--gold);
+}
+
+.navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path stroke="var(--gold)" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/></svg>');
+}
+
+footer {
+    background-color: var(--brown-medium);
+    color: var(--cream);
+    border-top: 4px solid var(--gold);
+}
+
+/* Botones y formularios */
+
+
+
+
+.nav-link {
+    background-color: var(--gold);
+    color: var(--brown-dark);
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.nav-link:hover {
+    background-color: var(--brown-dark);
+    color: var(--cream);
+}
+/* Estilo de contenedores */
+.container {
+    background-color: var(--cream);
+    border: 2px solid var(--brown-medium);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Encabezados */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+    color: var(--brown-dark);
+}
+
+/* Enlaces */
+a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: var(--brown-dark);
+    }
+
+
+.btn-primary {
+    background-color: var(--brown-dark);
+}
+
+img {
+    width: 100%;
+    padding-bottom: 10px;
 }
