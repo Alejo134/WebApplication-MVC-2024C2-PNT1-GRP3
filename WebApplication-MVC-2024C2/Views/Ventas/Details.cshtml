@@ -60,7 +60,7 @@
     <div id="confirmationModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <p>Devolución confirmada, su dinero y puntos serán reembolsados en breve, será redirigido al inicio.</p>
+            <p>Compra cancelada. Sus puntos serán reembolsados en breve. </p>
         </div>
     </div>
 
@@ -90,10 +90,10 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Redirigir al Home después de 3 segundos
+                        // Redirigir a Venta/Create después de 2 segundos
                         setTimeout(function () {
-                            window.location.href = "/Home/Index";  // Redirige al Home
-                        }, 3000);  // Tiempo de espera de 3 segundos
+                            window.location.href = "/Ventas/Create";  // Redirige a Venta/Create
+                        }, 2000);  // Tiempo de espera de 2 segundos
 
                     } else {
                         alert("Error al eliminar la venta.");

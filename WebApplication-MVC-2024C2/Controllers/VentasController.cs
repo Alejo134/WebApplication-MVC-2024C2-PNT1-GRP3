@@ -34,7 +34,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             ViewData["HideNavbar"] = true;
            
             // Establecer en TempData que el usuario ha iniciado sesión
-            TempData["IsUserLoggedIn"] = true;
+            //TempData["IsUserLoggedIn"] = true;
 
 
             if (id == null)

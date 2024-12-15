@@ -18,8 +18,17 @@ namespace WebApplication_MVC_2024C2.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Verificar si la sesión está inicializada
+            if (HttpContext.Session.GetInt32("IDUsuario") != null)
+            {
+                // Si la sesión está iniciada, establecer en TempData que el usuario ha iniciado sesión
+                TempData["IsUserLoggedIn"] = true;
+            }
+
+            // Obtener las películas de la base de datos
             var peliculas = await _context.Peliculas.ToListAsync();
             ViewBag.Cartelera = peliculas;
+
             return View();
         }
 
