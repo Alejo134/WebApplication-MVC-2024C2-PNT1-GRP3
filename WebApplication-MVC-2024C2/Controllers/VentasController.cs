@@ -32,8 +32,11 @@ namespace WebApplication_MVC_2024C2.Controllers
         // GET: Ventas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
+            // Aseguramos que el navbar esté oculto si estamos en la acción de creación
             ViewData["HideNavbar"] = true;
+           
+            // Establecer en TempData que el usuario ha iniciado sesión
+            TempData["IsUserLoggedIn"] = true;
 
 
             if (id == null)
@@ -64,6 +67,9 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             // Indicar en la vista que el navbar no se debe mostrar
             ViewData["HideNavbar"] = true;
+
+            // Establecer en TempData que el usuario ha iniciado sesión
+            TempData["IsUserLoggedIn"] = true;
 
             // Obtener las películas desde la base de datos
             var peliculas = await _context.Peliculas.ToListAsync();
@@ -133,6 +139,9 @@ namespace WebApplication_MVC_2024C2.Controllers
 
             // Aseguramos que el navbar esté oculto si estamos en la acción de creación
             ViewData["HideNavbar"] = true;
+
+            // Establecer en TempData que el usuario ha iniciado sesión
+            TempData["IsUserLoggedIn"] = true;
 
 
             // Validar que la película seleccionada existe
