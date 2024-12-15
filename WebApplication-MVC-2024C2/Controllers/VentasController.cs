@@ -32,6 +32,10 @@ namespace WebApplication_MVC_2024C2.Controllers
         // GET: Ventas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+            ViewData["HideNavbar"] = true;
+
+
             if (id == null)
             {
                 return NotFound();
@@ -57,6 +61,10 @@ namespace WebApplication_MVC_2024C2.Controllers
         // GET: Ventas/Create
         public async Task<IActionResult> Create(int? peliculaId)
         {
+
+            // Indicar en la vista que el navbar no se debe mostrar
+            ViewData["HideNavbar"] = true;
+
             // Obtener las películas desde la base de datos
             var peliculas = await _context.Peliculas.ToListAsync();
 
@@ -122,6 +130,11 @@ namespace WebApplication_MVC_2024C2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdPelicula,Fecha,CantButacas,Total,Pelicula,Promocion")] Venta venta)
         {
+
+            // Aseguramos que el navbar esté oculto si estamos en la acción de creación
+            ViewData["HideNavbar"] = true;
+
+
             // Validar que la película seleccionada existe
             var pelicula = await _context.Peliculas.FirstOrDefaultAsync(p => p.Id == venta.IdPelicula);
 
