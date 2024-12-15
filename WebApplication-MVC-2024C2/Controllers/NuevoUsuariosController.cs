@@ -64,7 +64,7 @@ namespace WebApplication_MVC_2024C2.Controllers
                 if (usuarioExistente != null)
                 {
                     ModelState.AddModelError("Usuario", "Este nombre de usuario ya está registrado.");
-                    return View(nuevoUsuario); // Retorna la vista con el mensaje de error
+                    return View(nuevoUsuario); 
                 }
 
                 var emailExistente = await _context.NuevoUsuario

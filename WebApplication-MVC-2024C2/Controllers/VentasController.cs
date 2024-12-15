@@ -23,9 +23,7 @@ namespace WebApplication_MVC_2024C2.Controllers
         // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            var ventas = await _context.Ventas
-                                       // .Include(v => v.Pelicula) // Incluye la película asociada a la venta
-                                        .ToListAsync();
+            var ventas = await _context.Ventas.ToListAsync();
             return View(ventas);
         }
 
@@ -78,7 +76,7 @@ namespace WebApplication_MVC_2024C2.Controllers
             if (!peliculas.Any())
             {
                 TempData["ErrorMessage"] = "No hay películas disponibles.";
-                return RedirectToAction(nameof(Index)); // O puedes redirigir a otra acción si prefieres
+                return RedirectToAction(nameof(Index)); 
             }
 
             int selectedPeliculaId;
