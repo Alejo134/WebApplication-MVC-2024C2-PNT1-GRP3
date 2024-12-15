@@ -173,3 +173,16 @@ img {
     width: 100%;
     padding-bottom: 10px;
 }
+
+.card-translucent {
+    background-color: rgba(218, 165, 32, 0.7); /* Dorado translúcido */
+    border: 1px solid var(--brown-dark);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card-translucent:hover {
+        transform: scale(1.03); /* Efecto de hover */
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+    }
