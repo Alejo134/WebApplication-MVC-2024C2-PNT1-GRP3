@@ -80,8 +80,10 @@ namespace WebApplication_MVC_2024C2.Controllers
                 _context.Add(nuevoUsuario);
                 await _context.SaveChangesAsync();
 
+                //TempData["IsUserLoggedIn"] = true;
+
                 // Redirigir a la página de índice u otra página después de la creación
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
 
             // Si el modelo no es válido o si hay errores de validación, retornar la vista con el modelo
