@@ -25,25 +25,23 @@
                 <div class="col-md-4">
                     <div class="card card-translucent mb-4 box-shadow">
                         <div class="card-body">
-                            @if(i == 0 || i == 1){
-                            <img src="https://www.ecartelera.com/carteles/4500/4578/001_m.jpg"><img/>
-                        }else if (i == 2 || i == 3){
-                                                    <img src="https://xl.movieposterdb.com/10_05/2004/316654/xl_316654_8c68e077.jpg">
 
-                                <img/>
-                        }
-                        else
-                        {
-                            <img src="https://www.sonypictures.com.ar/sites/argentina/files/tittle-page/thumbnails/255526_Spiderman3__2007_1400x2100_MEX.jpg"><img/>
-                            }
+                            @if(i == 0 || i == 1) {
+                            <img src="https://www.ecartelera.com/carteles/4500/4578/001_m.jpg"><img/>
+                                }else if (i == 2 || i == 3){
+                                    <img src="https://xl.movieposterdb.com/10_05/2004/316654/xl_316654_8c68e077.jpg"><img/>
+                                    } else
+                                        {
+                                    <img src="https://www.sonypictures.com.ar/sites/argentina/files/tittle-page/thumbnails/255526_Spiderman3__2007_1400x2100_MEX.jpg"><img/>
+                                    }
+
                             <h5 class="card-title">@pelicula.Titulo</h5>
                             <p class="card-text"><strong>Descripción:</strong> @pelicula.Descripcion</p>
                             <p class="card-text"><strong>Clasificación:</strong> @pelicula.Clasificacion</p>
                             <p class="card-text"><strong>Número de Sala:</strong> @pelicula.NroDeSala</p>
                             <p class="card-text"><strong>Fecha:</strong> @pelicula.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
                             <p class="card-text"><strong>Precio:</strong> $@pelicula.Precio</p>
-                            <p class="card-text"><strong>Cantidad de Butacas:</strong> @pelicula.CantButacas</p>
-                            
+                            <p class="card-text"><strong>Cantidad de Butacas:</strong> @pelicula.CantButacas</p>                           
                            
                             <!-- Formulario para enviar el Id de la película seleccionada -->
                             <form asp-controller="Ventas" asp-action="RedirectToCreate" method="post">
@@ -60,6 +58,7 @@
            
         </div>
     }
+
     else
     {
         <p>No hay películas disponibles en este momento.</p>

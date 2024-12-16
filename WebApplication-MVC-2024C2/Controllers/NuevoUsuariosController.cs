@@ -50,8 +50,6 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // POST: NuevoUsuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Usuario,Contrasenia,Email")] NuevoUsuario nuevoUsuario)
@@ -107,8 +105,6 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // POST: NuevoUsuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Usuario,Contrasenia,Email")] NuevoUsuario nuevoUsuario)

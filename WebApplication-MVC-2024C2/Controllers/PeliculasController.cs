@@ -50,8 +50,6 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // POST: Peliculas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)
@@ -82,8 +80,6 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // POST: Peliculas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,Clasificacion,NroDeSala,Fecha,Precio,CantButacas")] Pelicula pelicula)

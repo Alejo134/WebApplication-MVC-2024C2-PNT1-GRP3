@@ -270,8 +270,6 @@ namespace WebApplication_MVC_2024C2.Controllers
         }
 
         // POST: Ventas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,IdPelicula,Fecha,CantButacas,Total")] Venta venta)
@@ -341,19 +339,21 @@ namespace WebApplication_MVC_2024C2.Controllers
                     pelicula.CantButacas += venta.CantButacas;  // Sumar las butacas reservadas a la cantidad disponible
                     var userId = HttpContext.Session.GetInt32("IDUsuario");
                     var usuario = await _context.NuevoUsuario.FirstOrDefaultAsync(u => u.Id == userId);
-                    if (venta.Promocion)
-                    {
-                        usuario.Puntos += 1000;
-                        _context.Update(usuario);
-                    }
-                    else
-                    {
-                        usuario.Puntos -= 200;
-                        _context.Update(usuario);
-                    }
-                
 
-
+                    if (usuario != null)
+                    {
+                        if (venta.Promocion)
+                        {
+                            usuario.Puntos += 1000;
+                            _context.Update(usuario);
+                        }
+                        else
+                        {
+                            usuario.Puntos -= 200;
+                            _context.Update(usuario);
+                        }
+                    }
+               
                     // Actualizar la película en la base de datos
                     _context.Update(pelicula);
                     
@@ -369,7 +369,6 @@ namespace WebApplication_MVC_2024C2.Controllers
             // Redirigir al índice (lista de ventas)
             return RedirectToAction(nameof(Index));
         }
-
 
         private bool VentaExists(int id)
         {
