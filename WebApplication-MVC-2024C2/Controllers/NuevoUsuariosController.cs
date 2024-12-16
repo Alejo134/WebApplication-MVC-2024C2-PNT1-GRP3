@@ -80,7 +80,12 @@ namespace WebApplication_MVC_2024C2.Controllers
                 _context.Add(nuevoUsuario);
                 await _context.SaveChangesAsync();
 
-                //TempData["IsUserLoggedIn"] = true;
+                
+                // Guardar información del usuario en la sesión
+                HttpContext.Session.SetInt32("IDUsuario", nuevoUsuario.Id);
+
+                // Establecer en TempData que el usuario ha iniciado sesión
+                TempData["IsUserLoggedIn"] = true;
 
                 // Redirigir a la página de índice u otra página después de la creación
                 return RedirectToAction("Index", "Home");
