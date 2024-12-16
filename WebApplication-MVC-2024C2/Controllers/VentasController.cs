@@ -33,10 +33,6 @@ namespace WebApplication_MVC_2024C2.Controllers
             // Aseguramos que el navbar esté oculto si estamos en la acción de creación
             ViewData["HideNavbar"] = true;
            
-            // Establecer en TempData que el usuario ha iniciado sesión
-            //TempData["IsUserLoggedIn"] = true;
-
-
             if (id == null)
             {
                 return NotFound();
@@ -366,7 +362,7 @@ namespace WebApplication_MVC_2024C2.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // Redirigir al índice (lista de ventas)
+            
             return RedirectToAction(nameof(Index));
         }
 
